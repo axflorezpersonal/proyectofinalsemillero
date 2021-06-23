@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
+import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -27,8 +28,6 @@ class BDService {
     return await openDatabase(rutaBD, version: 1,
         onCreate: (Database db, int version) async {
       return await db.execute('''
-          DROP TABLE IF EXISTS contactos;
-          DROP TABLE IF EXISTS conversaciones;
           CREATE TABLE IF NOT EXISTS contactos (
             contacto_id INTEGER PRIMARY KEY AUTOINCREMENT,
             contacto_token TEXT,
@@ -90,4 +89,30 @@ class BDService {
 
   /* Gestionar conversaciones */
 
+  agregarConversacion(ConversacionModelo conversacion) async {
+    final bd = await baseDatos;
+    await bd!.insert("conversaciones", {
+      "contacto_id": conversacion.usuarioId,
+      "conversacion_tipo_mensaje": conversacion.conversacionTipoMensaje,
+      "conversacion_mensaje": conversacion.conversacionMensaje
+    });
+  }
+
+  Future<List<ConversacionModelo>> listarConversacionContacto(
+      {required int contactoid}) async {
+    final bd = await baseDatos;
+    List<ConversacionModelo> listaConversaciones = [];
+    List resultado = await bd!.rawQuery(
+        "SELECT * FROM conversaciones WHERE contacto_id = $contactoid");
+    print("lala: $resultado");
+    resultado.forEach((conversacion) {
+      ConversacionModelo tmpConversacion = ConversacionModelo(
+          conversacionId: conversacion["conversacion_id"],
+          usuarioId: conversacion["contacto_id"],
+          conversacionTipoMensaje: conversacion["conversacion_tipo_mensaje"],
+          conversacionMensaje: conversacion["conversacion_mensaje"]);
+      listaConversaciones.add(tmpConversacion);
+    });
+    return listaConversaciones;
+  }
 }
