@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
+import 'package:proyectofinalsemillero/src/services/bd_service.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -11,35 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Map<String, dynamic>> contacts = [
-    {'id': 1, 'name': 'Pedro', 'lastName': "Perez"},
-    {'id': 2, 'name': 'Jose', 'lastName': "Rodriguez"},
-    {'id': 3, 'name': 'John', 'lastName': "Doe"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-    {'id': 4, 'name': 'Bill', 'lastName': "Gates"},
-  ];
+  final servicioBD = BDService();
 
   @override
   Widget build(BuildContext context) {
@@ -52,26 +28,40 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget listMessage() {
-    return ListView.builder(
-      itemCount: contacts.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title:
-              Text(contacts[index]['name'] + " " + contacts[index]['lastName']),
-          leading: Icon(Icons.ac_unit_outlined),
-          trailing: Icon(Icons.arrow_forward_ios),
-          onTap: () {
-            Navigator.pushNamed(context, 'messages');
-          },
-        );
-      },
-    );
+    return FutureBuilder<List<ContactoModelo>>(
+        future: BDService.bdService.listarContactos(),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData == true) {
+            if (snapshot.data?.length > 0) {
+              return ListView.builder(
+                itemCount: snapshot.data?.length,
+                itemBuilder: (context, index) {
+                  final contacto = snapshot.data?[index];
+                  print("Contacto $index: ${contacto.toString()}");
+                  return ListTile(
+                    title: Text(contacto.usuarioNombre),
+                    leading: Icon(Icons.ac_unit_outlined),
+                    trailing: Icon(Icons.arrow_forward_ios),
+                    onTap: () {
+                      Navigator.pushNamed(context, 'messages',
+                          arguments: {contacto.contactoId});
+                    },
+                  );
+                },
+              );
+            } else {
+              return Container(child: Text("No hay contactos"));
+            }
+          } else {
+            return Container(child: Text("No hay contactos"));
+          }
+        });
   }
 
   Widget buttonScanner() {
     return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       Container(
-              child: IconButton(
+        child: IconButton(
             color: Colors.blue,
             onPressed: () {
               scanQR();
@@ -86,7 +76,16 @@ class _HomePageState extends State<HomePage> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancelar', true, ScanMode.QR);
-      print(barcodeScanRes);
+      Map mapScan = jsonDecode(barcodeScanRes);
+      ContactoModelo contacto = ContactoModelo(
+        usuarioToken: mapScan['token'],
+        usuarioKey: mapScan['key'],
+        usuarioNombre: mapScan['usuario'],
+        usuarioUrlAvatar: mapScan['url_avatar'],
+      );
+      setState(() {
+        BDService.bdService.insertarContacto(contacto);
+      });
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
