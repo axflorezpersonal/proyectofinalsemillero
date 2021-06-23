@@ -20,11 +20,8 @@ class BDService {
   }
 
   Future<Database?> abrirBD() async {
-    Directory directorio = await getApplicationDocumentsDirectory();
-    final rutaBD = join(directorio.path, "dbChat.db");
-
-    print("Desde abrir: $rutaBD");
-
+    String directorio = await getDatabasesPath();
+    final rutaBD = join(directorio, "dbChat.db");
     return await openDatabase(rutaBD, version: 1,
         onCreate: (Database db, int version) async {
       return await db.execute('''
@@ -64,7 +61,6 @@ class BDService {
     final bd = await baseDatos;
     List<ContactoModelo> listaContactos = [];
     List resultado = await bd!.rawQuery("SELECT * FROM contactos");
-    print("lala: $resultado");
     resultado.forEach((contacto) {
       ContactoModelo tmpPersona = ContactoModelo(
           usuarioId: contacto["contacto_id"],
