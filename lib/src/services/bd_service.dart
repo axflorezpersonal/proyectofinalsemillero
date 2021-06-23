@@ -22,12 +22,13 @@ class BDService {
     Directory directorio = await getApplicationDocumentsDirectory();
     final rutaBD = join(directorio.path, "dbChat.db");
 
-    //TODO: Quitar esto
-    print("Desde abrir BD: $rutaBD");
+    print("Desde abrir: $rutaBD");
 
     return await openDatabase(rutaBD, version: 1,
         onCreate: (Database db, int version) async {
       return await db.execute('''
+          DROP TABLE IF EXISTS contactos;
+          DROP TABLE IF EXISTS conversaciones;
           CREATE TABLE IF NOT EXISTS contactos (
             contacto_id INTEGER PRIMARY KEY AUTOINCREMENT,
             contacto_token TEXT,
@@ -47,6 +48,7 @@ class BDService {
     });
   }
 
+  /* Gestionar contactos */
   insertarContacto(ContactoModelo nuevoContacto) async {
     final bd = await baseDatos;
     final idInsertado = await bd!.insert("contactos", {
@@ -58,4 +60,34 @@ class BDService {
 
     print("idInsertado: $idInsertado");
   }
+
+  Future<List<ContactoModelo>> listarContactos() async {
+    final bd = await baseDatos;
+    List<ContactoModelo> listaContactos = [];
+    List resultado = await bd!.rawQuery("SELECT * FROM contactos");
+    print("lala: $resultado");
+    resultado.forEach((contacto) {
+      ContactoModelo tmpPersona = ContactoModelo(
+          usuarioId: contacto["contacto_id"],
+          usuarioToken: contacto["contacto_token"],
+          usuarioKey: contacto["contacto_key"],
+          usuarioNombre: contacto["contacto_nombre"],
+          usuarioUrlAvatar: contacto["contacto_url_avatar"]);
+      listaContactos.add(tmpPersona);
+    });
+    return listaContactos;
+  }
+
+  borrarTodosContactos() async {
+    final db = await baseDatos;
+    final res = db!.rawDelete("DELETE FROM contactos");
+  }
+
+  borrarContacto({required int id}) async {
+    final db = await baseDatos;
+    db!.rawDelete("DELETE FROM contactos WHERE contacto_id = $id");
+  }
+
+  /* Gestionar conversaciones */
+
 }
