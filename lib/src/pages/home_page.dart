@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
+import 'package:proyectofinalsemillero/src/services/bd_service.dart';
+
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -10,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
   List<Map<String, dynamic>> contacts = [
     {'id': 1, 'name': 'Pedro', 'lastName': "Perez"},
     {'id': 2, 'name': 'Jose', 'lastName': "Rodriguez"},
@@ -42,6 +48,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    BDService.bdService.baseDatos;
     return Scaffold(
       appBar: AppBar(title: Text('contacts')),
       body: Column(
@@ -85,7 +92,14 @@ class _HomePageState extends State<HomePage> {
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancelar', true, ScanMode.QR);
-      print(barcodeScanRes);
+      Map mapScan =  jsonDecode(barcodeScanRes);
+      ContactoModelo contacto =  ContactoModelo(
+        usuarioToken:mapScan['token'],
+        usuarioKey:mapScan['key'],
+        usuarioNombre:mapScan['usuario'],
+        usuarioUrlAvatar:mapScan['url_avatar'],
+      );
+      BDService.bdService.insertarContacto(contacto);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
