@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyectofinalsemillero/src/models/chatmessage_model.dart';
 
 class MessagesPage extends StatefulWidget {
   MessagesPage({Key? key}) : super(key: key);
@@ -7,43 +8,40 @@ class MessagesPage extends StatefulWidget {
   _MessagesPageState createState() => _MessagesPageState();
 }
 
-class ChatMessage {
-  String messageContent;
-  String messageType;
-  ChatMessage({required this.messageContent, required this.messageType});
-}
+
 
 class _MessagesPageState extends State<MessagesPage> {
+  final _controllerAddMessagge = TextEditingController();
   List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
+    // ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
+    // ChatMessage(
+    //     messageContent: "Hey Kriss, I am doing fine dude. wbu?",
+    //     messageType: "sender"),
+    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
+    // ChatMessage(
+    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
   ];
 
   @override
@@ -53,48 +51,55 @@ class _MessagesPageState extends State<MessagesPage> {
       body: Column(
         children: [
           Expanded(child: listMessage()),
-          Container(padding: EdgeInsets.only(top:30,left:10,right:10,bottom:30), child: sectionbuttons()),
+          Container(
+              padding:
+                  EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 30),
+              child: sectionbuttons()),
         ],
       ),
     );
   }
 
-  sectionbuttons(){
-   return  Row(
-                children: <Widget>[
-                  // GestureDetector(
-                  //   onTap: (){
-                  //   },
-                  //   child: Container(
-                  //     height: 30,
-                  //     width: 30,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.lightBlue,
-                  //       borderRadius: BorderRadius.circular(30),
-                  //     ),
-                  //     child: Icon(Icons.add, color: Colors.white, size: 20, ),
-                  //   ),
-                  // ),
-                  SizedBox(width: 15,),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Write message...",
-                        hintStyle: TextStyle(color: Colors.black54),
-                        border: InputBorder.none
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 15,),
-                  FloatingActionButton(
-                    onPressed: (){},
-                    child: Icon(Icons.send,color: Colors.white,size: 18,),
-                    backgroundColor: Colors.blue,
-                    elevation: 0,
-                  ),
-                ],
-                
-              );
+  sectionbuttons() {
+    return Row(
+      children: <Widget>[
+        SizedBox(
+          width: 15,
+        ),
+        Expanded(
+          child: TextField(
+            controller: _controllerAddMessagge,
+            decoration: InputDecoration(
+                hintText: "Escribe un Mensaje...",
+                hintStyle: TextStyle(color: Colors.black54),
+                border: InputBorder.none),
+          ),
+        ),
+        SizedBox(
+          width: 15,
+        ),
+        FloatingActionButton(
+          onPressed: () {
+            print(_controllerAddMessagge.text);
+
+            setState(() {
+              ChatMessage chatMessage = ChatMessage(
+                  messageContent: _controllerAddMessagge.text,
+                  messageType: 'sender');
+              messages.add(chatMessage);
+              _controllerAddMessagge.text = '';
+            });
+          },
+          child: Icon(
+            Icons.send,
+            color: Colors.white,
+            size: 18,
+          ),
+          backgroundColor: Colors.blue,
+          elevation: 0,
+        ),
+      ],
+    );
   }
 
   Widget listMessage() {
@@ -102,7 +107,7 @@ class _MessagesPageState extends State<MessagesPage> {
       itemCount: messages.length,
       shrinkWrap: true,
       padding: EdgeInsets.only(top: 10, bottom: 10),
-      physics: NeverScrollableScrollPhysics(),
+      // physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return Container(
           padding: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
