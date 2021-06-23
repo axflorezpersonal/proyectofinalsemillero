@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/pages/home_page.dart';
 import 'package:proyectofinalsemillero/src/pages/messages_page.dart';
+import 'package:proyectofinalsemillero/src/services/messages_services.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await PushNotificationService.initializeApp();
+
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+// ignore: use_key_in_widget_constructors
+class MyApp extends StatefulWidget {
+    @override
+  _MyAppState createState() => _MyAppState();
+  }
+
+  class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Context!
+    PushNotificationService.messagesStream.listen((message) {
+      navigatorKey.currentState?.pushNamed('message', arguments: message);
+      final snackBar = SnackBar(content: Text(message));
+      messengerKey.currentState?.showSnackBar(snackBar);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
