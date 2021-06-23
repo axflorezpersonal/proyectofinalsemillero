@@ -21,6 +21,27 @@ class _MessagesPageState extends State<MessagesPage> {
         messageContent: "Hey Kriss, I am doing fine dude. wbu?",
         messageType: "sender"),
     ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
+    ChatMessage(
+        messageContent: "Is there any thing wrong?", messageType: "sender"),
     ChatMessage(
         messageContent: "Is there any thing wrong?", messageType: "sender"),
   ];
@@ -41,19 +62,19 @@ class _MessagesPageState extends State<MessagesPage> {
   sectionbuttons(){
    return  Row(
                 children: <Widget>[
-                  GestureDetector(
-                    onTap: (){
-                    },
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Icon(Icons.add, color: Colors.white, size: 20, ),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: (){
+                  //   },
+                  //   child: Container(
+                  //     height: 30,
+                  //     width: 30,
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.lightBlue,
+                  //       borderRadius: BorderRadius.circular(30),
+                  //     ),
+                  //     child: Icon(Icons.add, color: Colors.white, size: 20, ),
+                  //   ),
+                  // ),
                   SizedBox(width: 15,),
                   Expanded(
                     child: TextField(

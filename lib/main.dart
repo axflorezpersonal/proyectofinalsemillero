@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/pages/home_page.dart';
+import 'package:proyectofinalsemillero/src/pages/messages_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
+      routes: {
+        'messages':(context) => MessagesPage()
+      },
       home: HomePage(),
     );
   }
