@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/models/chatmessage_model.dart';
+import 'package:proyectofinalsemillero/src/services/http_service.dart';
 
 class MessagesPage extends StatefulWidget {
   MessagesPage({Key? key}) : super(key: key);
@@ -87,8 +88,12 @@ class _MessagesPageState extends State<MessagesPage> {
                   messageContent: _controllerAddMessagge.text,
                   messageType: 'sender');
               messages.add(chatMessage);
+
+              final service = HttpService();
+              service.sendMessage('Hola test Anthony', "e-DJYqoZR3uXe0GPzYrvV2:APA91bEADMC6TACC10KUm0E_3GEH2F5C3CPXrmk90IMJeYndqrLC3wAs3RCQ2GRhk1KXwPe_Dya4dYvsoY2au0ib4BiLkM46pdJrNle_0547iNwpi5H5aX9JmMDKeN7kaPvNGZhY1GU-");
               _controllerAddMessagge.text = '';
             });
+
           },
           child: Icon(
             Icons.send,

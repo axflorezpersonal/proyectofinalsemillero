@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       Navigator.pushNamed(context, 'messages',
-                          arguments: {contacto.contactoId});
+                          arguments: '');
                     },
                   );
                 },
