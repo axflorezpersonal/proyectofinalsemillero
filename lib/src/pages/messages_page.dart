@@ -21,7 +21,7 @@ class _MessagesPageState extends State<MessagesPage> {
   Widget build(BuildContext context) {
     contacto = ModalRoute.of(context)!.settings.arguments as ContactoModelo;
     return Scaffold(
-      appBar: AppBar(title: Text('Messages ${contacto?.getUsuarioNombre}')),
+      appBar: AppBar(title: Text('En línea ${contacto?.getUsuarioNombre}')),
       body: Column(
         children: [
           Expanded(child: listMessage()),
