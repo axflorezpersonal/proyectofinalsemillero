@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
                   final contacto = snapshot.data?[index];
                   return ListTile(
                     title: Text(contacto.usuarioNombre),
-                    leading: Icon(Icons.ac_unit_outlined),
+                    leading: _verImg(contacto),
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       Navigator.pushNamed(context, 'messages',
@@ -86,6 +86,29 @@ class _HomePageState extends State<HomePage> {
       });
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
+    }
+  }
+    Widget _verImg(ContactoModelo contacto) {
+    if (contacto.usuarioUrlAvatar == '') {
+      return Container(
+        width: 50.0,
+        child: InkWell(
+          child: CircleAvatar(
+            radius: 100.0,
+            backgroundImage: NetworkImage(
+                'https://c0.klipartz.com/pngpicture/730/348/gratis-png-iconos-de-computadora-cargar-icono-de-carga-thumbnail.png'),
+          ),
+          
+        ),
+      );
+    } else {
+      return Container(
+        width: 50.0,
+        child: CircleAvatar(
+          radius: 100.0,
+          backgroundImage: NetworkImage('${contacto.usuarioUrlAvatar}'),
+        ),
+      );
     }
   }
 }
