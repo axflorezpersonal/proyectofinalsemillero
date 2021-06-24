@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasData == true) {
             if (snapshot.data?.length > 0) {
               return ListView.builder(
+                padding: EdgeInsets.only(top:30.0),
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   final contacto = snapshot.data?[index];
