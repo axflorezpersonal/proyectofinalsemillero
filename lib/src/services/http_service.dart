@@ -15,7 +15,8 @@ class HttpService {
       "notification": {"body": "Texto del push", "title": "Titulo pruebas"},
       "priority": "high",
       "data": {"clave": message},
-      "to": to
+      "to": to,
+      "from": TOKEN_APP
     };
 
     final respuesta = await http.post(Uri.parse(url),

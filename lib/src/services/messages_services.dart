@@ -28,6 +28,7 @@ class PushNotificationService {
           await BDService.bdService.buscarContactoPorToken(message.data["to"]);
 
       print(contactoRemitente);
+      print(TOKEN_APP);
 
       await BDService.bdService.agregarConversacion(ConversacionModelo(
           usuarioId: contactoRemitente.getUsuarioId,
@@ -51,7 +52,7 @@ class PushNotificationService {
     token = await FirebaseMessaging.instance.getToken();
     print('Token de la aplicacion : $token');
 
-    //TOKEN_APP = token!;
+    TOKEN_APP = token!;
 
     // Handlers
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);

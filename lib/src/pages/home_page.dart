@@ -88,7 +88,8 @@ class _HomePageState extends State<HomePage> {
       barcodeScanRes = 'Failed to get platform version.';
     }
   }
-    Widget _verImg(ContactoModelo contacto) {
+
+  Widget _verImg(ContactoModelo contacto) {
     if (contacto.usuarioUrlAvatar == '') {
       return Container(
         width: 50.0,
@@ -98,7 +99,6 @@ class _HomePageState extends State<HomePage> {
             backgroundImage: NetworkImage(
                 'https://c0.klipartz.com/pngpicture/730/348/gratis-png-iconos-de-computadora-cargar-icono-de-carga-thumbnail.png'),
           ),
-          
         ),
       );
     } else {
