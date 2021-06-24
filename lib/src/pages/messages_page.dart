@@ -56,15 +56,15 @@ class _MessagesPageState extends State<MessagesPage> {
         FloatingActionButton(
           onPressed: () {
             if (_controllerAddMessagge.text.trim() != "") {
-              //TODO: Enviar mensaje al contacto
               setState(() {
                 BDService.bdService.agregarConversacion(ConversacionModelo(
                     usuarioId: contacto!.getUsuarioId,
                     conversacionTipoMensaje: TIPO_MENSAJE_EMISOR,
                     conversacionMensaje: _controllerAddMessagge.text));
-                final service = HttpService();
-                service.sendMessage('Hola test Anthony',
-                    "e-DJYqoZR3uXe0GPzYrvV2:APA91bEADMC6TACC10KUm0E_3GEH2F5C3CPXrmk90IMJeYndqrLC3wAs3RCQ2GRhk1KXwPe_Dya4dYvsoY2au0ib4BiLkM46pdJrNle_0547iNwpi5H5aX9JmMDKeN7kaPvNGZhY1GU-");
+                final service = HttpService(
+                    to: contacto!.getUsuarioToken,
+                    key: contacto!.getUsuarioKey);
+                service.sendMessage(_controllerAddMessagge.text);
                 _controllerAddMessagge.text = "";
                 FocusScope.of(context).requestFocus(new FocusNode());
                 _irUltimoMensaje();
