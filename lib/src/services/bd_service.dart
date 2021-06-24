@@ -91,6 +91,22 @@ class BDService {
     });
   }
 
+  Future<ContactoModelo> buscarContactoPorToken(String token) async {
+    final bd = await baseDatos;
+    late ContactoModelo contactoEncontrado;
+    List resultado = await bd!.rawQuery(
+        "SELECT * FROM contactos WHERE contacto_token = '$token' LIMIT 1");
+    resultado.forEach((contacto) {
+      contactoEncontrado = ContactoModelo(
+          usuarioId: contacto["contacto_id"],
+          usuarioToken: contacto["contacto_token"],
+          usuarioKey: contacto["contacto_key"],
+          usuarioNombre: contacto["contacto_nombre"],
+          usuarioUrlAvatar: contacto["contacto_url_avatar"]);
+    });
+    return contactoEncontrado;
+  }
+
   Future<List<ConversacionModelo>> listarConversacionContacto(
       {required int contactoid}) async {
     final bd = await baseDatos;

@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
+import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
+import 'package:proyectofinalsemillero/src/services/bd_service.dart';
+import 'package:proyectofinalsemillero/src/config/constant_service.dart';
 
 class PushNotificationService {
   static FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -19,7 +23,19 @@ class PushNotificationService {
   static Future _onMessageHandler(RemoteMessage message) async {
     print('onMessage');
     print(message.data);
-    _messageStream.add(message.data['clave'] ?? 'No hay datos');
+    if (message.data["from"] != null) {
+      ContactoModelo contactoRemitente =
+          await BDService.bdService.buscarContactoPorToken(message.data["to"]);
+
+      print(contactoRemitente);
+
+      await BDService.bdService.agregarConversacion(ConversacionModelo(
+          usuarioId: contactoRemitente.getUsuarioId,
+          conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,
+          conversacionMensaje: message.data['message']));
+    }
+
+    _messageStream.add(message.data['message'] ?? 'No hay datos');
   }
 
   static Future _onMessageOpenApp(RemoteMessage message) async {
@@ -34,6 +50,8 @@ class PushNotificationService {
 
     token = await FirebaseMessaging.instance.getToken();
     print('Token de la aplicacion : $token');
+
+    //TOKEN_APP = token!;
 
     // Handlers
     FirebaseMessaging.onBackgroundMessage(_backgroundHandler);

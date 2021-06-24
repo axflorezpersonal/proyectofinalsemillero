@@ -4,6 +4,7 @@ import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
 import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
 import 'package:proyectofinalsemillero/src/services/bd_service.dart';
 import 'package:proyectofinalsemillero/src/services/http_service.dart';
+import 'package:proyectofinalsemillero/src/config/constant_service.dart';
 
 class MessagesPage extends StatefulWidget {
   @override
@@ -11,8 +12,6 @@ class MessagesPage extends StatefulWidget {
 }
 
 class _MessagesPageState extends State<MessagesPage> {
-  static const String TIPO_MENSAJE_EMISOR = "emisor";
-  static const String TIPO_MENSAJE_RECEPTOR = "receptor";
   final servicioBD = BDService();
   ContactoModelo? contacto;
   final _controllerAddMessagge = TextEditingController();
