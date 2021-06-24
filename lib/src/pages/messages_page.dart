@@ -30,6 +30,7 @@ class _MessagesPageState extends State<MessagesPage> {
     PushNotificationService.messagesStream.listen((message) {
       setState(() {
         print(message);
+        _irUltimoMensaje();
       });
     });
   }
