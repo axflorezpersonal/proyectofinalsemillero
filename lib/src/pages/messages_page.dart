@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:proyectofinalsemillero/src/models/chatmessage_model.dart';
 import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
 import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
 import 'package:proyectofinalsemillero/src/services/bd_service.dart';
 import 'package:proyectofinalsemillero/src/services/http_service.dart';
 import 'package:proyectofinalsemillero/src/config/constant_service.dart';
+import 'package:proyectofinalsemillero/src/services/messages_services.dart';
 
 class MessagesPage extends StatefulWidget {
   @override
@@ -17,9 +19,28 @@ class _MessagesPageState extends State<MessagesPage> {
   final _controllerAddMessagge = TextEditingController();
   final _controladorScroll = ScrollController();
 
+  static final StreamController<String> _messageStream =
+      StreamController.broadcast();
+  static Stream<String> get messagesStream => _messageStream.stream;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    PushNotificationService.messagesStream.listen((message) {
+      setState(() {
+        print(message);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     contacto = ModalRoute.of(context)!.settings.arguments as ContactoModelo;
+
+    print(contacto!.getUsuarioToken);
+    print(contacto!.getUsuarioKey);
+
     return Scaffold(
       appBar: AppBar(title: Text('En línea ${contacto?.getUsuarioNombre}')),
       body: Column(

@@ -17,32 +17,27 @@ class PushNotificationService {
   static Future _backgroundHandler(RemoteMessage message) async {
     print('onBackground');
     print(message.data);
-    _messageStream.add(message.data['clave'] ?? 'No hay datos');
+    _messageStream.add(message.data['message'] ?? 'No hay datos');
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
     print('onMessage');
     print(message.data);
-    if (message.data["from"] != null) {
-      ContactoModelo contactoRemitente =
-          await BDService.bdService.buscarContactoPorToken(message.data["to"]);
-
-      print(contactoRemitente);
-      print(TOKEN_APP);
-
+    if (message.data["token_from"].toString().isNotEmpty == true) {
+      ContactoModelo contactoRemitente = await BDService.bdService
+          .buscarContactoPorToken(message.data["token_from"]);
       await BDService.bdService.agregarConversacion(ConversacionModelo(
           usuarioId: contactoRemitente.getUsuarioId,
           conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,
           conversacionMensaje: message.data['message']));
     }
-
     _messageStream.add(message.data['message'] ?? 'No hay datos');
   }
 
   static Future _onMessageOpenApp(RemoteMessage message) async {
     print('onMessageOpenApp');
     print(message.data);
-    _messageStream.add(message.data['clave'] ?? 'No hay datos');
+    _messageStream.add(message.data['message'] ?? 'No hay datos');
   }
 
   static Future initializeApp() async {
