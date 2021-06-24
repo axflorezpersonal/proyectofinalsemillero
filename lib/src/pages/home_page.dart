@@ -36,23 +36,22 @@ class _HomePageState extends State<HomePage> {
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   final contacto = snapshot.data?[index];
-                  print("Contacto $index: ${contacto.toString()}");
                   return ListTile(
                     title: Text(contacto.usuarioNombre),
                     leading: Icon(Icons.ac_unit_outlined),
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
                       Navigator.pushNamed(context, 'messages',
-                          arguments: {contacto.contactoId});
+                          arguments: contacto);
                     },
                   );
                 },
               );
             } else {
-              return Container(child: Text("No hay contactos"));
+              return Center(child: Text("No hay contactos"));
             }
           } else {
-            return Container(child: Text("No hay contactos"));
+            return Center(child: Text("No hay contactos"));
           }
         });
   }

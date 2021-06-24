@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:path_provider/path_provider.dart';
 import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
 import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -24,19 +22,18 @@ class BDService {
     final rutaBD = join(directorio, "dbChat.db");
     return await openDatabase(rutaBD, version: 1,
         onCreate: (Database db, int version) async {
-      return await db.execute('''
-          CREATE TABLE IF NOT EXISTS contactos (
+      await db.execute('''CREATE TABLE IF NOT EXISTS contactos (
             contacto_id INTEGER PRIMARY KEY AUTOINCREMENT,
             contacto_token TEXT,
             contacto_key TEXT,
             contacto_nombre TEXT,
             contacto_url_avatar TEXT
           );
-
-        CREATE TABLE IF NOT EXISTS conversaciones (
+        ''');
+      return db.execute('''CREATE TABLE IF NOT EXISTS conversaciones (
           conversacion_id INTEGER PRIMARY KEY AUTOINCREMENT,
           contacto_id INTEGER,
-          conversacion_tipo_mensaje INTEGER,
+          conversacion_tipo_mensaje TEXT,
           conversacion_mensaje TEXT,
           FOREIGN KEY (contacto_id) REFERENCES contactos (contacto_id) ON DELETE NO ACTION ON UPDATE NO ACTION
           );
@@ -75,7 +72,7 @@ class BDService {
 
   borrarTodosContactos() async {
     final db = await baseDatos;
-    final res = db!.rawDelete("DELETE FROM contactos");
+    db!.rawDelete("DELETE FROM contactos");
   }
 
   borrarContacto({required int id}) async {
@@ -100,7 +97,6 @@ class BDService {
     List<ConversacionModelo> listaConversaciones = [];
     List resultado = await bd!.rawQuery(
         "SELECT * FROM conversaciones WHERE contacto_id = $contactoid");
-    print("lala: $resultado");
     resultado.forEach((conversacion) {
       ConversacionModelo tmpConversacion = ConversacionModelo(
           conversacionId: conversacion["conversacion_id"],

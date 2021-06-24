@@ -1,51 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/models/chatmessage_model.dart';
+import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
+import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
+import 'package:proyectofinalsemillero/src/services/bd_service.dart';
 
 class MessagesPage extends StatefulWidget {
-  MessagesPage({Key? key}) : super(key: key);
-
   @override
   _MessagesPageState createState() => _MessagesPageState();
 }
 
-
-
 class _MessagesPageState extends State<MessagesPage> {
+  static const String TIPO_MENSAJE_EMISOR = "emisor";
+  static const String TIPO_MENSAJE_RECEPTOR = "receptor";
+  final servicioBD = BDService();
+  ContactoModelo? contacto;
   final _controllerAddMessagge = TextEditingController();
-  List<ChatMessage> messages = [
-    // ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    // ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    // ChatMessage(
-    //     messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-    //     messageType: "sender"),
-    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    // ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-    // ChatMessage(
-    //     messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  final _controladorScroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    contacto = ModalRoute.of(context)!.settings.arguments as ContactoModelo;
     return Scaffold(
       appBar: AppBar(title: Text('Messages')),
       body: Column(
@@ -80,15 +54,18 @@ class _MessagesPageState extends State<MessagesPage> {
         ),
         FloatingActionButton(
           onPressed: () {
-            print(_controllerAddMessagge.text);
-
-            setState(() {
-              ChatMessage chatMessage = ChatMessage(
-                  messageContent: _controllerAddMessagge.text,
-                  messageType: 'sender');
-              messages.add(chatMessage);
-              _controllerAddMessagge.text = '';
-            });
+            if (_controllerAddMessagge.text.trim() != "") {
+              //TODO: Enviar mensaje al contacto
+              setState(() {
+                BDService.bdService.agregarConversacion(ConversacionModelo(
+                    usuarioId: contacto!.getUsuarioId,
+                    conversacionTipoMensaje: TIPO_MENSAJE_EMISOR,
+                    conversacionMensaje: _controllerAddMessagge.text));
+                _controllerAddMessagge.text = "";
+                FocusScope.of(context).requestFocus(new FocusNode());
+                _irUltimoMensaje();
+              });
+            }
           },
           child: Icon(
             Icons.send,
@@ -103,34 +80,66 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Widget listMessage() {
-    return ListView.builder(
-      itemCount: messages.length,
-      shrinkWrap: true,
-      padding: EdgeInsets.only(top: 10, bottom: 10),
-      // physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Container(
-          padding: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
-          child: Align(
-            alignment: (messages[index].messageType == "receiver"
-                ? Alignment.topLeft
-                : Alignment.topRight),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color: (messages[index].messageType == "receiver"
-                    ? Colors.grey.shade200
-                    : Colors.blue[200]),
-              ),
-              padding: EdgeInsets.all(16),
-              child: Text(
-                messages[index].messageContent,
-                style: TextStyle(fontSize: 15),
-              ),
-            ),
-          ),
-        );
-      },
-    );
+    return FutureBuilder<List<ConversacionModelo>>(
+        future: BDService.bdService
+            .listarConversacionContacto(contactoid: contacto!.getUsuarioId),
+        builder: (context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData == true) {
+            if (snapshot.data?.length > 0) {
+              return ListView.builder(
+                controller: _controladorScroll,
+                itemCount: snapshot.data?.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.only(top: 10, bottom: 10),
+                // physics: NeverScrollableScrollPhysics(),
+                itemBuilder: (context, index) {
+                  ConversacionModelo mensaje = snapshot.data?[index];
+                  return Container(
+                    padding: EdgeInsets.only(
+                        left: 14, right: 14, top: 10, bottom: 10),
+                    child: Align(
+                      alignment: (mensaje.conversacionTipoMensaje ==
+                              TIPO_MENSAJE_RECEPTOR
+                          ? Alignment.topLeft
+                          : Alignment.topRight),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: (mensaje.conversacionTipoMensaje ==
+                                  TIPO_MENSAJE_RECEPTOR
+                              ? Colors.grey.shade200
+                              : Colors.blue[200]),
+                        ),
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          mensaje.conversacionMensaje,
+                          style: TextStyle(fontSize: 15),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              );
+            } else {
+              return Center(
+                child: Text("Sin mensajes"),
+              );
+            }
+          } else {
+            return Center(
+              child: Text("Sin mensajes"),
+            );
+          }
+        });
+  }
+
+  //Realiza el desplazamiento al final de la lista de mensajes
+  _irUltimoMensaje() {
+    try {
+      _controladorScroll.animateTo(_controladorScroll.position.maxScrollExtent,
+          duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+    } catch (ex) {
+      print(ex);
+    }
   }
 }

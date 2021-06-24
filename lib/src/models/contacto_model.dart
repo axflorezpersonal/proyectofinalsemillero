@@ -10,4 +10,10 @@ class ContactoModelo {
       required this.usuarioKey,
       required this.usuarioNombre,
       required this.usuarioUrlAvatar});
+
+  int get getUsuarioId => this.usuarioId;
+  String get getUsuarioToken => this.usuarioToken;
+  String get getUsuarioKey => this.usuarioKey;
+  String get getUsuarioNombre => this.usuarioNombre;
+  String get getUsuarioUrlAvatar => this.usuarioUrlAvatar;
 }

@@ -1,7 +1,7 @@
 class ConversacionModelo {
   int conversacionId;
   int usuarioId;
-  int conversacionTipoMensaje;
+  String conversacionTipoMensaje; //emisor o receptor
   String conversacionMensaje;
   ConversacionModelo({
     this.conversacionId = 0,
