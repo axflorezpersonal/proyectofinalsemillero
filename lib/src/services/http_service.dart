@@ -12,13 +12,14 @@ class HttpService {
   Future<Map<dynamic, dynamic>> sendMessage(String message) async {
     final url = 'https://fcm.googleapis.com/fcm/send';
     final datos = {
-      "notification": {"body": "Texto del push", "title": "Titulo pruebas"},
+      "notification": {
+        "body": "Toca aquí para verlo",
+        "title": "Tienes un nuevo mensaje!"
+      },
       "priority": "high",
       "data": {"message": message, "token_from": TOKEN_APP},
       "to": to
     };
-
-    print(datos);
 
     final respuesta = await http.post(Uri.parse(url),
         body: json.encode(datos),
