@@ -14,15 +14,16 @@ class HttpService {
     final datos = {
       "notification": {"body": "Texto del push", "title": "Titulo pruebas"},
       "priority": "high",
-      "data": {"clave": message},
-      "to": to,
-      "from": TOKEN_APP
+      "data": {"message": message, "token_from":TOKEN_APP},
+      "to":to
     };
+
+
 
     final respuesta = await http.post(Uri.parse(url),
         body: json.encode(datos),
         headers: {
-          'Authorization': "key=$key",
+          'Authorization': "key="+key,
           'content-type': 'application/json'
         });
 
