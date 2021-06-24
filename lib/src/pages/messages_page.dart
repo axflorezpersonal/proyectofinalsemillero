@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/models/chatmessage_model.dart';
-<<<<<<< HEAD
 import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
 import 'package:proyectofinalsemillero/src/models/conversacion_model.dart';
 import 'package:proyectofinalsemillero/src/services/bd_service.dart';
-=======
 import 'package:proyectofinalsemillero/src/services/http_service.dart';
->>>>>>> bd35f97aea812189a65dc7f6dab4d86fde888de9
 
 class MessagesPage extends StatefulWidget {
   @override
@@ -66,7 +63,8 @@ class _MessagesPageState extends State<MessagesPage> {
                     conversacionTipoMensaje: TIPO_MENSAJE_EMISOR,
                     conversacionMensaje: _controllerAddMessagge.text));
                 final service = HttpService();
-                service.sendMessage('Hola test Anthony', "e-DJYqoZR3uXe0GPzYrvV2:APA91bEADMC6TACC10KUm0E_3GEH2F5C3CPXrmk90IMJeYndqrLC3wAs3RCQ2GRhk1KXwPe_Dya4dYvsoY2au0ib4BiLkM46pdJrNle_0547iNwpi5H5aX9JmMDKeN7kaPvNGZhY1GU-");
+                service.sendMessage('Hola test Anthony',
+                    "e-DJYqoZR3uXe0GPzYrvV2:APA91bEADMC6TACC10KUm0E_3GEH2F5C3CPXrmk90IMJeYndqrLC3wAs3RCQ2GRhk1KXwPe_Dya4dYvsoY2au0ib4BiLkM46pdJrNle_0547iNwpi5H5aX9JmMDKeN7kaPvNGZhY1GU-");
                 _controllerAddMessagge.text = "";
                 FocusScope.of(context).requestFocus(new FocusNode());
                 _irUltimoMensaje();
