@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('contacts')),
+      appBar: AppBar(title: Text('Contactos')),
       body: Column(
         children: [Expanded(child: listMessage()), buttonScanner()],
       ),
@@ -33,7 +33,7 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.hasData == true) {
             if (snapshot.data?.length > 0) {
               return ListView.builder(
-                padding: EdgeInsets.only(top:30.0),
+                padding: EdgeInsets.only(top: 30.0),
                 itemCount: snapshot.data?.length,
                 itemBuilder: (context, index) {
                   final contacto = snapshot.data?[index];

@@ -15,29 +15,27 @@ class PushNotificationService {
   static Stream<String> get messagesStream => _messageStream.stream;
 
   static Future _backgroundHandler(RemoteMessage message) async {
-    print('onBackground');
+    print('Desde onBackground');
     print(message.data);
-    _messageStream.add(message.data['message'] ?? 'No hay datos');
+    if (message.data["token_from"].toString().isNotEmpty == true) {
+      _enviarMensaje(message.data["token_from"], message.data['message']);
+    }
   }
 
   static Future _onMessageHandler(RemoteMessage message) async {
-    print('onMessage');
+    print('Desde onMessageHandler');
     print(message.data);
     if (message.data["token_from"].toString().isNotEmpty == true) {
-      ContactoModelo contactoRemitente = await BDService.bdService
-          .buscarContactoPorToken(message.data["token_from"]);
-      await BDService.bdService.agregarConversacion(ConversacionModelo(
-          usuarioId: contactoRemitente.getUsuarioId,
-          conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,
-          conversacionMensaje: message.data['message']));
+      _enviarMensaje(message.data["token_from"], message.data['message']);
     }
-    _messageStream.add(message.data['message'] ?? 'No hay datos');
   }
 
   static Future _onMessageOpenApp(RemoteMessage message) async {
-    print('onMessageOpenApp');
+    print('Desde onMessageOpenApp');
     print(message.data);
-    _messageStream.add(message.data['message'] ?? 'No hay datos');
+    /*if (message.data["token_from"].toString().isNotEmpty == true) {
+      _enviarMensaje(message.data["token_from"], message.data['message']);
+    }*/
   }
 
   static Future initializeApp() async {
@@ -70,5 +68,15 @@ class PushNotificationService {
 
   static closeStreams() {
     _messageStream.close();
+  }
+
+  static _enviarMensaje(String token, String mensaje) async {
+    ContactoModelo contactoRemitente =
+        await BDService.bdService.buscarContactoPorToken(token);
+    await BDService.bdService.agregarConversacion(ConversacionModelo(
+        usuarioId: contactoRemitente.getUsuarioId,
+        conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,
+        conversacionMensaje: mensaje));
+    _messageStream.add(mensaje);
   }
 }
