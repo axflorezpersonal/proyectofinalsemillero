@@ -14,7 +14,7 @@ class HttpService {
     final datos = {
       "notification": {"body": "Texto del push", "title": "Titulo pruebas"},
       "priority": "high",
-      "data": {"clave": "test"},
+      "data": {"clave": message},
       "to": to
     };
 
