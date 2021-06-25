@@ -8,7 +8,7 @@ import 'package:proyectofinalsemillero/src/services/bd_service.dart';
 class MessagesProvider extends ChangeNotifier {
   void agregarMensaje(RemoteMessage message) async {
     ContactoModelo contactoRemitente = await BDService.bdService
-        .buscarContactoPorToken(message.data["token_from"]);
+        .buscarContactoPorToken(message.data["token_from"],message.data["key_from"]);
     await BDService.bdService.agregarConversacion(ConversacionModelo(
         usuarioId: contactoRemitente.getUsuarioId,
         conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,

@@ -18,7 +18,7 @@ class PushNotificationService {
     print('Desde onBackground');
     print(message.data);
     if (message.data["token_from"].toString().isNotEmpty == true) {
-      _enviarMensaje(message.data["token_from"], message.data['message']);
+      _enviarMensaje(message.data["token_from"], message.data['message'],message.data['key_from']);
     }
   }
 
@@ -26,7 +26,7 @@ class PushNotificationService {
     print('Desde onMessageHandler');
     print(message.data);
     if (message.data["token_from"].toString().isNotEmpty == true) {
-      _enviarMensaje(message.data["token_from"], message.data['message']);
+      _enviarMensaje(message.data["token_from"], message.data['message'],message.data['key_from']);
     }
   }
 
@@ -70,9 +70,10 @@ class PushNotificationService {
     _messageStream.close();
   }
 
-  static _enviarMensaje(String token, String mensaje) async {
+  static _enviarMensaje(String token, String mensaje, String keyFrom) async {
     ContactoModelo contactoRemitente =
-        await BDService.bdService.buscarContactoPorToken(token);
+        await BDService.bdService.buscarContactoPorToken(token,keyFrom);
+    print(contactoRemitente);
     await BDService.bdService.agregarConversacion(ConversacionModelo(
         usuarioId: contactoRemitente.getUsuarioId,
         conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,

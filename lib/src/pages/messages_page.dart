@@ -43,7 +43,16 @@ class _MessagesPageState extends State<MessagesPage> {
     print(contacto!.getUsuarioKey);
 
     return Scaffold(
-      appBar: AppBar(title: Text('En línea ${contacto?.getUsuarioNombre}')),
+      appBar: AppBar(
+        title: Text('En línea ${contacto?.getUsuarioNombre}'),
+        actions: [
+          Container(
+            child:    contacto?.getUsuarioNombre=='Usuario desconocido'? IconButton(onPressed: (){}, icon: Icon(Icons.edit)): Text("") ,
+          )
+          ,
+        
+        ],
+      ),
       body: Column(
         children: [
           Expanded(child: listMessage()),

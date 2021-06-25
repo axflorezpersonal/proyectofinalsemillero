@@ -16,4 +16,5 @@ class ContactoModelo {
   String get getUsuarioKey => this.usuarioKey;
   String get getUsuarioNombre => this.usuarioNombre;
   String get getUsuarioUrlAvatar => this.usuarioUrlAvatar;
+  set setUsiarioId(int id)=>this.usuarioId=id;
 }
