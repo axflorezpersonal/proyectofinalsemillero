@@ -17,10 +17,10 @@ class HttpService {
         "title": "Tienes un nuevo mensaje!"
       },
       "priority": "high",
-      "data": {"message": message, "token_from": TOKEN_APP},
+      "data": {"message": message, "token_from": TOKEN_APP, 'key_from':keyServer},
       "to": to
     };
-
+    print(keyServer);
     final respuesta = await http.post(Uri.parse(url),
         body: json.encode(datos),
         headers: {
