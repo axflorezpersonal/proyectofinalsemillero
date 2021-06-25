@@ -16,6 +16,13 @@ class HttpService {
         "body": "Toca aquí para verlo",
         "title": "Tienes un nuevo mensaje!"
       },
+       "apns":{
+        "payload":{
+            "aps":{
+              "sound":"default"
+            }
+        }
+      },
       "priority": "high",
       "data": {"message": message, "token_from": TOKEN_APP, 'key_from':keyServer},
       "to": to

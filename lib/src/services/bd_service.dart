@@ -50,8 +50,16 @@ class BDService {
       "contacto_nombre": nuevoContacto.usuarioNombre,
       "contacto_url_avatar": nuevoContacto.usuarioUrlAvatar
     });
-    nuevoContacto.setUsiarioId=idInsertado;
+    nuevoContacto.setUsiarioId = idInsertado;
     return nuevoContacto;
+  }
+
+  /* Gestionar contactos */
+  editarContacto(ContactoModelo editarContacto) async {
+    final bd = await baseDatos;
+    final idActualizado = await bd!.rawUpdate(
+        "UPDATE contactos SET contacto_token = '${editarContacto.usuarioToken}', contacto_key = '${editarContacto.usuarioKey}',contacto_nombre= '${editarContacto.usuarioNombre}',contacto_url_avatar='${editarContacto.usuarioUrlAvatar}' WHERE contacto_id='${editarContacto.usuarioId}'");
+    return editarContacto;
   }
 
   Future<List<ContactoModelo>> listarContactos() async {
@@ -91,19 +99,19 @@ class BDService {
     });
   }
 
-  Future<ContactoModelo> buscarContactoPorToken(String token, String keyFrom) async {
+  Future<ContactoModelo> buscarContactoPorToken(
+      String token, String keyFrom) async {
     final bd = await baseDatos;
     late ContactoModelo contactoEncontrado;
     List resultado = await bd!.rawQuery(
         "SELECT * FROM contactos WHERE contacto_token = '$token' LIMIT 1");
-    if (resultado.length==0){
-      ContactoModelo usuarioDesconocido=ContactoModelo(
+    if (resultado.length == 0) {
+      ContactoModelo usuarioDesconocido = ContactoModelo(
           usuarioToken: token,
           usuarioKey: keyFrom,
           usuarioNombre: 'Usuario desconocido',
           usuarioUrlAvatar: '');
       return bdService.insertarContacto(usuarioDesconocido);
-    
     }
     resultado.forEach((contacto) {
       contactoEncontrado = ContactoModelo(
