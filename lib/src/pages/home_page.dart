@@ -77,10 +77,7 @@ class _HomePageState extends State<HomePage> {
         child: IconButton(
             color: Colors.blue,
             onPressed: () {
-              // scanQR();
-                setState(() {
-        BDService.bdService.insertarContactoPruebaAnaCarol();
-      });
+              scanQR();
             },
             icon: Icon(Icons.qr_code_scanner)),
       )
