@@ -16,19 +16,19 @@ class HttpService {
         "body": "Toca aquí para verlo",
         "title": "Tienes un nuevo mensaje!"
       },
-      
-      "apns":{
-        "payload":{
-            "aps":{
-              "sound":"default"
-            }
+      "apns": {
+        "payload": {
+          "aps": {"sound": "default"}
         }
       },
       "priority": "high",
-      "data": {"message": message, "token_from": TOKEN_APP, 'key_from':keyServer},
+      "data": {
+        "message": message,
+        "token_from": TOKEN_APP,
+        'key_from': keyServer
+      },
       "to": to
     };
-    print(keyServer);
     final respuesta = await http.post(Uri.parse(url),
         body: json.encode(datos),
         headers: {
@@ -41,7 +41,6 @@ class HttpService {
     if (respuesta.statusCode == 200) {
       return resDatos;
     } else {
-      print(resDatos);
       return throw Exception(resDatos['error_description']);
     }
   }

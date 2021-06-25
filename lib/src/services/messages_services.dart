@@ -1,3 +1,5 @@
+//messages_services
+
 import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
@@ -15,16 +17,21 @@ class PushNotificationService {
       StreamController.broadcast();
   static Stream<String> get messagesStream => _messageStream.stream;
 
+  static final StreamController<String> _contactosStream =
+      StreamController.broadcast();
+  static Stream<String> get contactosStream => _contactosStream.stream;
+
   static Future _backgroundHandler(RemoteMessage message) async {
     print('Desde onBackground');
     print(message.data);
-     FlutterRingtonePlayer.play(
+    FlutterRingtonePlayer.play(
       android: AndroidSounds.notification,
       ios: IosSounds.glass,
       looping: false, // Android only - API >= 28
       volume: 0.5, // Android only - API >= 28
       asAlarm: false, // Android only - all APIs
     );
+
     if (message.data["token_from"].toString().isNotEmpty == true) {
       _enviarMensaje(message.data["token_from"], message.data['message'],
           message.data['key_from']);
@@ -33,7 +40,7 @@ class PushNotificationService {
 
   static Future _onMessageHandler(RemoteMessage message) async {
     print('Desde onMessageHandler');
-     FlutterRingtonePlayer.play(
+    FlutterRingtonePlayer.play(
       android: AndroidSounds.notification,
       ios: IosSounds.glass,
       looping: false, // Android only - API >= 28
@@ -44,22 +51,34 @@ class PushNotificationService {
     if (message.data["token_from"].toString().isNotEmpty == true) {
       _enviarMensaje(message.data["token_from"], message.data['message'],
           message.data['key_from']);
+
+      _contactosStream.add("");
     }
   }
 
   static Future _onMessageOpenApp(RemoteMessage message) async {
     print('Desde onMessageOpenApp');
-     FlutterRingtonePlayer.play(
+    print(message.data);
+    FlutterRingtonePlayer.play(
       android: AndroidSounds.notification,
       ios: IosSounds.glass,
       looping: false, // Android only - API >= 28
       volume: 0.5, // Android only - API >= 28
       asAlarm: false, // Android only - all APIs
     );
-    print(message.data);
-    /*if (message.data["token_from"].toString().isNotEmpty == true) {
-      _enviarMensaje(message.data["token_from"], message.data['message']);
-    }*/
+
+    ContactoModelo contactoRemitente = await BDService.bdService
+        .buscarContactoPorToken(
+            message.data["token_from"], message.data["key_from"]);
+    if (contactoRemitente.getUsuarioId.toString().isNotEmpty) {
+      _contactosStream.add(contactoRemitente.toJSon);
+    }
+
+    if (message.data["token_from"].toString().isNotEmpty == true) {
+      _enviarMensaje(message.data["token_from"], message.data['message'],
+          message.data['key_from'],
+          cambiarVista: true);
+    }
   }
 
   static Future initializeApp() async {
@@ -86,6 +105,7 @@ class PushNotificationService {
         criticalAlert: false,
         provisional: false,
         sound: true);
+
     FlutterRingtonePlayer.play(
       android: AndroidSounds.notification,
       ios: IosSounds.glass,
@@ -99,17 +119,22 @@ class PushNotificationService {
 
   static closeStreams() {
     _messageStream.close();
+    _contactosStream.close();
   }
 
-  static _enviarMensaje(String token, String mensaje, String keyFrom) async {
+  static _enviarMensaje(String token, String mensaje, String keyFrom,
+      {bool cambiarVista = false}) async {
     ContactoModelo contactoRemitente =
         await BDService.bdService.buscarContactoPorToken(token, keyFrom);
-    print(contactoRemitente);
 
-    await BDService.bdService.agregarConversacion(ConversacionModelo(
-        usuarioId: contactoRemitente.getUsuarioId,
-        conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,
-        conversacionMensaje: mensaje));
-    _messageStream.add(mensaje);
+    if (cambiarVista) {
+      _messageStream.add("[_CONVERSACION_]|||${contactoRemitente.toJSon}");
+    } else {
+      await BDService.bdService.agregarConversacion(ConversacionModelo(
+          usuarioId: contactoRemitente.getUsuarioId,
+          conversacionTipoMensaje: TIPO_MENSAJE_RECEPTOR,
+          conversacionMensaje: mensaje));
+      _messageStream.add(mensaje);
+    }
   }
 }

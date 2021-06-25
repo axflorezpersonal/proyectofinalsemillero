@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
 import 'package:proyectofinalsemillero/src/services/bd_service.dart';
+import 'package:proyectofinalsemillero/src/services/messages_services.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -15,6 +16,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final servicioBD = BDService();
+
+  @override
+  void initState() {
+    super.initState();
+    PushNotificationService.contactosStream.listen((jsonContacto) {
+      if (jsonContacto.isNotEmpty) {
+        ContactoModelo contactoQueEscribe =
+            ContactoModelo.fromJson(jsonContacto);
+        Navigator.pushNamed(context, 'messages', arguments: contactoQueEscribe);
+      }
+      setState(() {});
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                     leading: _verImg(contacto),
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
-                      Navigator.pushNamed(context, 'messages',
+                      Navigator.pushNamed(context, 'editContact',
                           arguments: contacto);
                     },
                   );
