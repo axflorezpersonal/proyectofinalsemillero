@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/pages/home_page.dart';
 import 'package:proyectofinalsemillero/src/pages/messages_page.dart';
+import 'package:proyectofinalsemillero/src/pages/form_page.dart';
 import 'package:proyectofinalsemillero/src/services/messages_services.dart';
 
 void main() async {
@@ -38,7 +39,10 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routes: {'messages': (context) => MessagesPage()},
+      routes: {
+        'messages': (context) => MessagesPage(),
+        "editContact": (context) => FormPage(),
+      },
       home: HomePage(),
     );
   }

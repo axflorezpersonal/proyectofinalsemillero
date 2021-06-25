@@ -53,6 +53,17 @@ class BDService {
     nuevoContacto.setUsiarioId = idInsertado;
     return nuevoContacto;
   }
+     insertarContactoPruebaAnaCarol() async {
+    final bd = await baseDatos;
+    final idInsertado = await bd!.insert("contactos", {
+      "contacto_token":'fVKv9hYCRWuChQlox-f97n:APA91bEN3BFUPHtIDw0KpJoN8bcER6Jw3TIMyv_VX7e6CLsGimvh8lbHWtRlA0IS2T9B8QHdOErOMtsdylaVfKQLn353ajuFp4U4LnR2ENx4JzipwYO1oAHRPryBFy4R8Ws6cok7LEHf',
+      "contacto_key": 'AAAA4StsKSY:APA91bEhMvUiW2oMwkk3YlC28KntUkEn5R54OHrDKb_Zm3GwI3e7I5anWubvbG5X-Ybc1CuZWIHOcK2P8bp5hcmR6uxHmW-WyOpJHdMI97NQVUYurMTwRkQ2VOx2utq94Z8ph5aSOtwM',
+      "contacto_nombre": 'Oscar Fernando Espinosa Rocha',
+      "contacto_url_avatar": 'https://www.profamedica.com/wp-content/uploads/2018/01/avatar-hombre.png'
+    });
+
+    print("idInsertado: $idInsertado");
+  }
 
   /* Gestionar contactos */
   editarContacto(ContactoModelo editarContacto) async {

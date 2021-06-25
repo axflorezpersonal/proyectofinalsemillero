@@ -47,7 +47,8 @@ class _MessagesPageState extends State<MessagesPage> {
         title: Text('En línea ${contacto?.getUsuarioNombre}'),
         actions: [
           Container(
-            child:    contacto?.getUsuarioNombre=='Usuario desconocido'? IconButton(onPressed: (){}, icon: Icon(Icons.edit)): Text("") ,
+            child:    contacto?.getUsuarioNombre=='Usuario desconocido'? IconButton(onPressed: (){    Navigator.pushNamed(context, 'editContact',
+                          arguments: contacto);}, icon: Icon(Icons.edit)): Text("") ,
           )
           ,
         
