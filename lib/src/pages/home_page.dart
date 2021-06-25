@@ -56,7 +56,8 @@ class _HomePageState extends State<HomePage> {
                     leading: _verImg(contacto),
                     trailing: Icon(Icons.arrow_forward_ios),
                     onTap: () {
-                      Navigator.pushNamed(context, 'editContact',
+                     
+                      Navigator.pushNamed(context, 'messages',
                           arguments: contacto);
                     },
                   );

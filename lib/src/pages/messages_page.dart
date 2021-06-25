@@ -50,7 +50,7 @@ class _MessagesPageState extends State<MessagesPage> {
         actions: [
           Container(
             child: contacto?.getUsuarioNombre == 'Usuario desconocido'
-                ? IconButton(onPressed: () { Navigator.pushNamed(context, 'messages',
+                ? IconButton(onPressed: () { Navigator.pushNamed(context, 'editContact',
                           arguments: contacto);}, icon: Icon(Icons.edit))
                 : Text(""),
           ),

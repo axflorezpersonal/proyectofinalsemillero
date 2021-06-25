@@ -18,7 +18,9 @@ class ContactoModelo {
   String get getUsuarioKey => this.usuarioKey;
   String get getUsuarioNombre => this.usuarioNombre;
   String get getUsuarioUrlAvatar => this.usuarioUrlAvatar;
-  set setUsiarioId(int id) => this.usuarioId = id;
+  set setUsuarioId(int id) => this.usuarioId = id;
+  set setUsuarioNombre(String nuevoNombre) => this.usuarioNombre = nuevoNombre;
+  set setUsuarioUrlAvatar(String nuevoAvatar) => this.usuarioUrlAvatar = nuevoAvatar;
 
   String get toJSon =>
       '{"contacto_id": "${this.usuarioId}","contacto_token": "${this.usuarioToken}","contacto_key": "${this.usuarioKey}","contacto_nombre": "${this.usuarioNombre}","contacto_url_avatar": "${this.usuarioUrlAvatar}"}';

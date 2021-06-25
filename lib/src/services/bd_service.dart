@@ -50,7 +50,7 @@ class BDService {
       "contacto_nombre": nuevoContacto.usuarioNombre,
       "contacto_url_avatar": nuevoContacto.usuarioUrlAvatar
     });
-    nuevoContacto.setUsiarioId = idInsertado;
+    nuevoContacto.setUsuarioId = idInsertado;
     return nuevoContacto;
   }
 
