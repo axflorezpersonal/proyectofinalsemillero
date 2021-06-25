@@ -42,7 +42,7 @@ class BDService {
   }
 
   /* Gestionar contactos */
-  insertarContacto(ContactoModelo nuevoContacto) async {
+  Future<ContactoModelo> insertarContacto(ContactoModelo nuevoContacto) async {
     final bd = await baseDatos;
     final idInsertado = await bd!.insert("contactos", {
       "contacto_token": nuevoContacto.usuarioToken,
@@ -54,7 +54,6 @@ class BDService {
     return nuevoContacto;
   }
 
-  /* Gestionar contactos */
   editarContacto(ContactoModelo editarContacto) async {
     final bd = await baseDatos;
     final idActualizado = await bd!.rawUpdate(

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:proyectofinalsemillero/src/models/contacto_model.dart';
@@ -29,7 +28,14 @@ class _MessagesPageState extends State<MessagesPage> {
     super.initState();
     PushNotificationService.messagesStream.listen((message) {
       setState(() {
-        print(message);
+        if (message.startsWith("[_CONVERSACION_]")) {
+          List<String> tmp = message.split("|||");
+          ContactoModelo contactoRemitente = ContactoModelo.fromJson(tmp[1]);
+          if (contacto!.getUsuarioId != contactoRemitente.getUsuarioId) {
+            Navigator.pushNamed(context, 'messages',
+                arguments: contactoRemitente);
+          }
+        }
         _irUltimoMensaje();
       });
     });
@@ -38,19 +44,15 @@ class _MessagesPageState extends State<MessagesPage> {
   @override
   Widget build(BuildContext context) {
     contacto = ModalRoute.of(context)!.settings.arguments as ContactoModelo;
-
-    print(contacto!.getUsuarioToken);
-    print(contacto!.getUsuarioKey);
-
     return Scaffold(
       appBar: AppBar(
         title: Text('En línea ${contacto?.getUsuarioNombre}'),
         actions: [
           Container(
-            child:    contacto?.getUsuarioNombre=='Usuario desconocido'? IconButton(onPressed: (){}, icon: Icon(Icons.edit)): Text("") ,
-          )
-          ,
-        
+            child: contacto?.getUsuarioNombre == 'Usuario desconocido'
+                ? IconButton(onPressed: () {}, icon: Icon(Icons.edit))
+                : Text(""),
+          ),
         ],
       ),
       body: Column(
@@ -84,21 +86,19 @@ class _MessagesPageState extends State<MessagesPage> {
           width: 15,
         ),
         FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             if (_controllerAddMessagge.text.trim() != "") {
-              setState(() {
-                BDService.bdService.agregarConversacion(ConversacionModelo(
-                    usuarioId: contacto!.getUsuarioId,
-                    conversacionTipoMensaje: TIPO_MENSAJE_EMISOR,
-                    conversacionMensaje: _controllerAddMessagge.text));
-                final service = HttpService(
-                    to: contacto!.getUsuarioToken,
-                    key: contacto!.getUsuarioKey);
-                service.sendMessage(_controllerAddMessagge.text);
-                _controllerAddMessagge.text = "";
-                FocusScope.of(context).requestFocus(new FocusNode());
-                _irUltimoMensaje();
-              });
+              await BDService.bdService.agregarConversacion(ConversacionModelo(
+                  usuarioId: contacto!.getUsuarioId,
+                  conversacionTipoMensaje: TIPO_MENSAJE_EMISOR,
+                  conversacionMensaje: _controllerAddMessagge.text));
+              final service = HttpService(
+                  to: contacto!.getUsuarioToken, key: contacto!.getUsuarioKey);
+              service.sendMessage(_controllerAddMessagge.text);
+              _controllerAddMessagge.text = "";
+              FocusScope.of(context).requestFocus(new FocusNode());
+              setState(() {});
+              _irUltimoMensaje();
             }
           },
           child: Icon(
