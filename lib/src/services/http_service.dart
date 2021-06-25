@@ -16,7 +16,8 @@ class HttpService {
         "body": "Toca aquí para verlo",
         "title": "Tienes un nuevo mensaje!"
       },
-       "apns":{
+      
+      "apns":{
         "payload":{
             "aps":{
               "sound":"default"

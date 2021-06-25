@@ -31,6 +31,7 @@ dependencies:
   sqflite: ^2.0.0+3
   flutter_barcode_scanner: ^2.0.0
   provider: ^5.0.0
+  flutter_ringtone_player: ^3.0.0
 
 dev_dependencies:
   flutter_test:
