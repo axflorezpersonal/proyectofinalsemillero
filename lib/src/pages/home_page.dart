@@ -78,7 +78,11 @@ class _HomePageState extends State<HomePage> {
         child: IconButton(
             color: Colors.blue,
             onPressed: () {
-              scanQR();
+                       setState(() {
+        BDService.bdService.insertarContactoPruebaAnaCarol();
+      });
+           
+             // scanQR();
             },
             icon: Icon(Icons.qr_code_scanner)),
       )
@@ -106,7 +110,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _verImg(ContactoModelo contacto) {
-    String pruebaUrl=contacto.usuarioUrlAvatar.substring(0, 5);
+    String pruebaUrl='';
+    if(contacto.usuarioUrlAvatar.length!=0){
+      String pruebaUrl=contacto.usuarioUrlAvatar.substring(0, 5);
+    }
+
     if (contacto.usuarioUrlAvatar == '' || pruebaUrl!='https') {
       return Container(
         width: 50.0,

@@ -53,6 +53,17 @@ class BDService {
     nuevoContacto.setUsuarioId = idInsertado;
     return nuevoContacto;
   }
+     insertarContactoPruebaAnaCarol() async {
+    final bd = await baseDatos;
+    final idInsertado = await bd!.insert("contactos", {
+      "contacto_token":'c0FlqRCQRZC5PH3kSuOr5R:APA91bHX9Buax1xduKTDsOoj6Pqa66oAnEAgRo53WRNVfLEpP4WPJvfY1VTZR-kQoDDR2PoQPjSvkIPZ-HYfFFP7QrWud6LCMOmtzc3XyNQlscNMOs8IszEOn1jboQsNvaYf4CSEIwhk',
+      "contacto_key": 'AAAApbz-qcY:APA91bF5E9fu6wv6opZNOpzwnFbXyFHee2TwQTfqzZ8MIbNRCADKZyz8LI4KbTvbHMzRCEW3xanKicXVs5wjIyM04DoOsbW_EG1meZYZVfsd0hvGA-YYxBS5BXkHzCmZYKHH8kWjBTgx',
+      "contacto_nombre": 'Antony Florez',
+      "contacto_url_avatar": 'https://www.profamedica.com/wp-content/uploads/2018/01/avatar-hombre.png'
+    });
+
+    print("idInsertado: $idInsertado");
+  }
    
   editarContacto(ContactoModelo editarContacto) async {
     final bd = await baseDatos;
