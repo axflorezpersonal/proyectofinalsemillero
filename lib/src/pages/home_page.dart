@@ -106,14 +106,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _verImg(ContactoModelo contacto) {
-    if (contacto.usuarioUrlAvatar == '') {
+    String pruebaUrl=contacto.usuarioUrlAvatar.substring(0, 5);
+    if (contacto.usuarioUrlAvatar == '' || pruebaUrl!='https') {
       return Container(
         width: 50.0,
         child: InkWell(
           child: CircleAvatar(
             radius: 100.0,
             backgroundImage: NetworkImage(
-                'https://c0.klipartz.com/pngpicture/730/348/gratis-png-iconos-de-computadora-cargar-icono-de-carga-thumbnail.png'),
+                'https://www.debate.com.mx/export/sites/debate/img/2017/05/08/4b463f287cd814216b7e7b2e52e82687.png_1805022883.png'),
           ),
         ),
       );
