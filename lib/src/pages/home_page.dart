@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
       String pruebaUrl=contacto.usuarioUrlAvatar.substring(0, 5);
     }
 
-    if (contacto.usuarioUrlAvatar == '' || pruebaUrl!='https') {
+    if (contacto.usuarioUrlAvatar == '' ) {
       return Container(
         width: 50.0,
         child: InkWell(
