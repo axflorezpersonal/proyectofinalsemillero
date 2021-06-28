@@ -129,7 +129,7 @@ class _FormPageState extends State<FormPage> {
                     },
                     child: const Text("Guardar"),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blueAccent,
+                      primary: Colors.teal[800],
                       textStyle: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,

@@ -45,9 +45,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(brightness: Brightness.light, primaryColor: Colors.teal[800],accentColor: Colors.greenAccent),
       routes: {
         'messages': (context) => MessagesPage(),
         "editContact": (context) => FormPage(),

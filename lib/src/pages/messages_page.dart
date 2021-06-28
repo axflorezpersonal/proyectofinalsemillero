@@ -49,10 +49,13 @@ class _MessagesPageState extends State<MessagesPage> {
         title: Text('En línea ${contacto?.getUsuarioNombre}'),
         actions: [
           Container(
-            child: contacto?.getUsuarioNombre == 'Usuario desconocido'
-                ? IconButton(onPressed: () { Navigator.pushNamed(context, 'editContact',
-                          arguments: contacto);}, icon: Icon(Icons.edit))
-                : Text(""),
+            // child: contacto?.getUsuarioNombre == 'Usuario desconocido'
+            //     ? IconButton(onPressed: () { Navigator.pushNamed(context, 'editContact',
+            //               arguments: contacto);}, icon: Icon(Icons.edit))
+            //     : Text(""),
+             child: IconButton(onPressed: () { Navigator.pushNamed(context, 'editContact',
+            arguments: contacto);}, icon: Icon(Icons.edit))
+           
           ),
         ],
       ),
@@ -107,7 +110,7 @@ class _MessagesPageState extends State<MessagesPage> {
             color: Colors.white,
             size: 18,
           ),
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.teal[800],
           elevation: 0,
         ),
       ],
@@ -142,8 +145,8 @@ class _MessagesPageState extends State<MessagesPage> {
                           borderRadius: BorderRadius.circular(20),
                           color: (mensaje.conversacionTipoMensaje ==
                                   TIPO_MENSAJE_RECEPTOR
-                              ? Colors.grey.shade200
-                              : Colors.blue[200]),
+                              ? Colors.white
+                              : Colors.lightGreenAccent[100]),
                         ),
                         padding: EdgeInsets.all(16),
                         child: Text(

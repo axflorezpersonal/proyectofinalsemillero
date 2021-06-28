@@ -53,8 +53,7 @@ class BDService {
     nuevoContacto.setUsuarioId = idInsertado;
     return nuevoContacto;
   }
-
-
+  
   editarContacto(ContactoModelo editarContacto) async {
     final bd = await baseDatos;
     final idActualizado = await bd!.rawUpdate(
