@@ -121,11 +121,13 @@ class _FormPageState extends State<FormPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
+                      setState(() {
+                        if (_formKey.currentState!.validate()) {
                         contacto?.setUsuarioNombre=_usuarioNombre.text;
                         contacto?.setUsuarioUrlAvatar=_usuarioNombre.text;
                          BDService.bdService.editarContacto(contacto!);
                       } else {}
+                      });
                     },
                     child: const Text("Guardar"),
                     style: ElevatedButton.styleFrom(
