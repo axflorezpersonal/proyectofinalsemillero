@@ -77,12 +77,8 @@ class _HomePageState extends State<HomePage> {
       Container(
         child: IconButton(
             color: Colors.blue,
-            onPressed: () {
-                       setState(() {
-        BDService.bdService.insertarContactoPruebaAnaCarol();
-      });
-           
-             // scanQR();
+            onPressed: () {        
+             scanQR();
             },
             icon: Icon(Icons.qr_code_scanner)),
       )
@@ -111,7 +107,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _verImg(ContactoModelo contacto) {
     String pruebaUrl='';
-    if(contacto.usuarioUrlAvatar.length!=0){
+    if(contacto.usuarioUrlAvatar.length>0){
       String pruebaUrl=contacto.usuarioUrlAvatar.substring(0, 5);
     }
 

@@ -145,7 +145,7 @@ class _MessagesPageState extends State<MessagesPage> {
                           borderRadius: BorderRadius.circular(20),
                           color: (mensaje.conversacionTipoMensaje ==
                                   TIPO_MENSAJE_RECEPTOR
-                              ? Colors.white
+                              ? Colors.grey
                               : Colors.lightGreenAccent[100]),
                         ),
                         padding: EdgeInsets.all(16),
